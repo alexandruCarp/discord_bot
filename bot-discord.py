@@ -1,3 +1,4 @@
+#!/bin/python3
 #This file is part of bot-discord.
 #
 #    bot-discord is free software: you can redistribute it and/or modify
@@ -13,8 +14,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with bot-discord.  If not, see <https://www.gnu.org/licenses/>
 
-#!./.venv/bin/python
-
+import argparse
 import discord      # base discord module
 import code         # code.interact
 import os           # environment variables
@@ -24,6 +24,10 @@ import glob
 
 from discord.ext import commands    # Bot class and utils
 
+#######ARGPARSE#######
+parser = argparse.ArgumentParser()
+parser.add_argument("-t", "--token",help="introduce bot token/by default gets it from env variable")
+args = parser.parse_args()
 ################################################################################
 ############################### HELPER FUNCTIONS ###############################
 ################################################################################
@@ -166,10 +170,11 @@ async def scram_error(ctx,error):
 ################################################################################
 
 if __name__ == '__main__':
-    # check that token exists in environment
-    if 'BOT_TOKEN' not in os.environ:
-        log_msg('save your token in the BOT_TOKEN env variable!', 'error')
-        exit(-1)
-
-    # launch bot (blocking operation)
-    bot.run(os.environ['BOT_TOKEN'])
+	if args.token:
+		bot.run(args.token)
+	else:
+        # check that token exists in environment
+		if 'BOT_TOKEN' not in os.environ:
+			log_msg('save your token in the BOT_TOKEN env variable!', 'error')
+			exit(-1)
+		bot.run(os.environ['BOT_TOKEN'])
